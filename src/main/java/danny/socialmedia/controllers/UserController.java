@@ -69,7 +69,6 @@ public class UserController {
 
     }
 
-
     @PostMapping("/auth/")
     public ResponseEntity<?> authenticateUser(@RequestBody UserDto userDto) throws IOException {
 
@@ -91,15 +90,17 @@ public class UserController {
         }
     }
 
-
-
-
     @GetMapping("/name/{username}")
     public ResponseEntity<?> findByUsername(@PathVariable String username){
 
-        return ResponseEntity.ok().body(userService.getUsername(username));
+        return ResponseEntity.ok().body(userService.getUsernameContaining(username));
 
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable int id,@RequestBody UserDto user){
+
+        return ResponseEntity.ok().body(userService.update(id,user));
+    }
 
 }

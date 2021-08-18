@@ -1,11 +1,15 @@
 package danny.socialmedia.services;
 
 
+import danny.socialmedia.Utils;
+import danny.socialmedia.dtos.UserDto;
 import danny.socialmedia.entities.Friend;
 import danny.socialmedia.entities.User;
 import danny.socialmedia.repositories.FriendRepository;
 import danny.socialmedia.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +27,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
 
+     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -37,7 +43,10 @@ public class UserService implements UserDetailsService {
 
     public User addUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setSecret_no(Utils.generateNum());
+        System.out.println(Utils.generateNum());
         return userRepository.save(user);
+
 
     }
 
@@ -51,9 +60,16 @@ public class UserService implements UserDetailsService {
     }
 
     public String deleteById(int id){
-         userRepository.deleteById(id);
-         return "User with id " + id  + " has been deleted successfully ";
+
+         if(userRepository.findById(id).isPresent()){
+             userRepository.deleteById(id);
+         }else {
+             return "User with id " + id + " is not found";
+         }
+        return "User with id " + id  + " has been deleted successfully ";
     }
+
+
 
     public User addFriend(int id,Friend friend){
 
@@ -72,7 +88,15 @@ public class UserService implements UserDetailsService {
 
 
 
-    public User getUsername(String username){
+    public User update(int id, UserDto userDto){
+       User user1 = userRepository.findById(id).get();
+       user1.setUsername(userDto.getUsername());
+//         logger.info(String.valueOf(user));
+         return userRepository.save(user1);
+    }
+
+
+    public User getUsernameContaining(String username){
 
        return userRepository.findByUsernameContainingIgnoreCase(username).get();
 

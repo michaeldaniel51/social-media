@@ -3,9 +3,8 @@ package danny.socialmedia.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import danny.socialmedia.Utils;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +14,9 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-@Data
+@ToString
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
@@ -34,8 +34,13 @@ public class User implements UserDetails  {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY )
+    private String secret_no ;
+
     @ElementCollection
     private List<String> roles;
+
 
     @OneToMany
     @JsonIgnore
