@@ -1,6 +1,7 @@
 package danny.socialmedia.services;
 
 import danny.socialmedia.entities.Mail;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,14 +11,12 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+@RequiredArgsConstructor
 @Service
 public class SendMailServiceImpl implements SendMailService{
 
     private final JavaMailSender javaMailSender;
 
-    public SendMailServiceImpl(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
 
 
     @Override
@@ -41,11 +40,11 @@ public class SendMailServiceImpl implements SendMailService{
 
             helper.setTo("to_@email");
 
-            helper.setSubject("Testing from Spring Boot");
+            helper.setSubject("Testing the email service");
 
-            helper.setText("Find the attached image", true);
+            helper.setText("Get the attached image", true);
 
-            helper.addAttachment("hero.jpg", new ClassPathResource("hero.jpg"));
+            helper.addAttachment("dan.jpg", new ClassPathResource("dan.jpg"));
 
             javaMailSender.send(msg);
         }

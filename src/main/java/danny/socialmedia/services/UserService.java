@@ -72,11 +72,8 @@ public class UserService implements UserDetailsService {
 
 
     public User addFriend(int id,Friend friend){
-
-       User user = userRepository.findByFriendsId(id).get();
-
+       User user = userRepository.findById(id).get();
        friend.setUser(user);
-
         friendRepository.save(friend);
         return userRepository.save(user);
 
@@ -91,16 +88,13 @@ public class UserService implements UserDetailsService {
     public User update(int id, UserDto userDto){
        User user1 = userRepository.findById(id).get();
        user1.setUsername(userDto.getUsername());
-//         logger.info(String.valueOf(user));
          return userRepository.save(user1);
     }
 
 
     public User getUsernameContaining(String username){
-
        return userRepository.findByUsernameContainingIgnoreCase(username).get();
 
     }
-
 
 }
