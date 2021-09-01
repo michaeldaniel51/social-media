@@ -10,7 +10,6 @@ public class SecurityService {
 
 
 
-
     public User authenticatedUser(){
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

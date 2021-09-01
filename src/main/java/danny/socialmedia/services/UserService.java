@@ -1,12 +1,12 @@
 package danny.socialmedia.services;
 
 
-import danny.socialmedia.Utils;
 import danny.socialmedia.dtos.UserDto;
 import danny.socialmedia.entities.Friend;
 import danny.socialmedia.entities.User;
 import danny.socialmedia.repositories.FriendRepository;
 import danny.socialmedia.repositories.UserRepository;
+import danny.socialmedia.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +26,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
+    private Utils utils;
 
      private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -42,20 +43,24 @@ public class UserService implements UserDetailsService {
 
 
     public User addUser(User user){
+       // user.setRoles(user.getRoles());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setSecret_no(Utils.generateNum());
-        System.out.println(Utils.generateNum());
+        String randomNumber = Utils.generateNum();
+        user.setToken(randomNumber);
+        System.out.println(randomNumber);
+        System.out.println(user);
         return userRepository.save(user);
 
 
     }
+
 
     public List<User> findAllUser(){
         return userRepository.findAll();
     }
 
     public User getById(int id){
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id). orElseThrow();
 
     }
 
@@ -74,8 +79,8 @@ public class UserService implements UserDetailsService {
     public User addFriend(int id,Friend friend){
        User user = userRepository.findById(id).get();
        friend.setUser(user);
-        friendRepository.save(friend);
-        return userRepository.save(user);
+       friendRepository.save(friend);
+       return userRepository.save(user);
 
     }
 
@@ -84,6 +89,10 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public List<User> findByToken(String token){
+
+        return userRepository.findByToken(token);
+    }
 
     public User update(int id, UserDto userDto){
        User user1 = userRepository.findById(id).get();

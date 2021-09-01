@@ -3,9 +3,8 @@ package danny.socialmedia.jwts;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import danny.socialmedia.entities.User;
 import danny.socialmedia.repositories.UserRepository;
-import danny.socialmedia.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +21,8 @@ public class JwtAuthorization extends BasicAuthenticationFilter {
 
 
 
+    @Autowired
+    private UserRepository userRepository;
 
     public JwtAuthorization(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -55,6 +56,7 @@ public class JwtAuthorization extends BasicAuthenticationFilter {
                         .build()
                         .verify(token.replace("Bearer ","")).getSubject();
                 if (user != null){
+                //    User user = userRepository.findByUsername(username).get();
                     return new UsernamePasswordAuthenticationToken(user,null,new ArrayList<>());
                 }
         }

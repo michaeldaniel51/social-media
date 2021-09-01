@@ -7,6 +7,7 @@ import danny.socialmedia.dtos.UserDto;
 import danny.socialmedia.entities.Friend;
 import danny.socialmedia.entities.User;
 import danny.socialmedia.services.UserService;
+import danny.socialmedia.utils.Utils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -39,9 +40,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<?> newUser(@RequestBody User user){
-        return ok().body(userService.addUser(user));
+        return ResponseEntity.ok().body(userService.addUser(user));
     }
 
     @GetMapping
@@ -101,6 +102,12 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable int id,@RequestBody UserDto user){
 
         return ResponseEntity.ok().body(userService.update(id,user));
+    }
+
+    @GetMapping("/token/{token}")
+    public ResponseEntity<?> getToken(@PathVariable String token){
+
+        return ResponseEntity.ok().body(userService.findByToken(token));
     }
 
 }

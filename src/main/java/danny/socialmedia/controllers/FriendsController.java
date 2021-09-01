@@ -15,24 +15,16 @@ public class FriendsController {
     private final FriendService friendService;
 
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> addFriend(@PathVariable int id) {
 
-//    @PostMapping("/{id}")
-//    public ResponseEntity<?> addFriend(@PathVariable int id, @RequestBody User user){
-//
-//        return ResponseEntity.ok(friendService.addFriend(id,user));
-
-
-
-
-
+        return ResponseEntity.ok(friendService.aFriend(id));
 
 
     }
 
 
-
-
-
+}
 
 
 
